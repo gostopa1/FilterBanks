@@ -59,8 +59,8 @@ model.layers(1).blr=0;
     
 layeri=1;
 model.layers(layeri).W=1*(zeros(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
-model.layers(1).W([1 500 1000],:)=1;
-model.layers(1).W([ 500 ],:)=-1;
+model.layers(1).W([1 end],:)=1;
+%model.layers(1).W([ 500 ],:)=-1;
 
 n = noins-1;
 Wn = 0.4;
@@ -103,7 +103,7 @@ dur=5;
 sampledur=fs*dur;
 
 soundsc(out_test(1:sampledur),fs)
-continue
+return
 soundsc(inwav(1:sampledur),fs)
 pause(dur)
 soundsc(outwav(1:sampledur),fs)

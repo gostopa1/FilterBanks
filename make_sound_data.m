@@ -9,7 +9,7 @@ gap=10;
 [inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(1:gap:end,1); end; inwav=inwav/max(abs(inwav));
 [outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(1:gap:end,1); end;outwav=outwav/max(abs(outwav));
 fs=fs/gap;
-Nins=1001;
+Nins=2001;
 Nouts=1;
 
 sampli=1;
