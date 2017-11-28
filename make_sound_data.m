@@ -1,15 +1,17 @@
-clear
-
-infile=['./sounds/gtrriff_clean.wav'];
 
 
-outfile=['./sounds/gtrriff_dist.wav']
+infile=['./sounds/darkclean.wav'];
 
-gap=10;
-[inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(1:gap:end,1); end; inwav=inwav/max(abs(inwav));
-[outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(1:gap:end,1); end;outwav=outwav/max(abs(outwav));
+
+outfile=['./sounds/darkdirt.wav']
+
+gap=4;
+[inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(:,1); end; inwav=inwav(1:gap:end); inwav=inwav/max(abs(inwav));
+[outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(:,1); end; outwav=outwav(1:gap:end); outwav=outwav/max(abs(outwav));
 fs=fs/gap;
-Nins=2001;
+if ~exist('Nins')
+    Nins=10;
+end
 Nouts=1;
 
 sampli=1;
