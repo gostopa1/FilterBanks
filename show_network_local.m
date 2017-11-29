@@ -1,5 +1,5 @@
 hold on
-linefactor=8;
+linefactor=2;
 for layeri=1:(length(model.layersizes)-1)
      ylocs1=(1:model.layersizesinitial(layeri));
     

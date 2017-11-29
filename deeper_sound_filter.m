@@ -10,7 +10,7 @@ y_test=y;
 %% Model Initialization
 clear model
 
-layers=[3];
+layers=[2];
 
 noins=size(x,2);
 noouts=size(y,2);
@@ -61,20 +61,17 @@ model.layers(1).blr=0;
 layeri=1;
 model.layers(layeri).W=1*(zeros(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
 
+crossfreq=5000;
+bpFilt = designfilt('lowpassfir','FilterOrder',Nins-1, 'CutoffFrequency',crossfreq , 'SampleRate',fs);
+bp1 = bpFilt.Coefficients;
+model.layers(1).W(:,1)=bp1;
 
-n = noins-1;
-Wn = 0.4;
-b = fir1(n,Wn);
+bpFilt = designfilt('highpassfir','FilterOrder',Nins-1, 'CutoffFrequency',crossfreq , 'SampleRate',fs);
+bp2= bpFilt.Coefficients;
+model.layers(1).W(:,2)=bp2;
 
-model.layers(1).W(:,1)=b;
-bp1= fir1(n,[0.5 0.6],'bandpass');
-
-model.layers(1).W(:,2)=bp1;
-bp2 = fir1(n,[0.7 0.9],'bandpass');
-model.layers(1).W(:,3)=bp2;
-
-%model.layers(2).W(1:3,:)=0;
-%model.layers(2).W(3,:)=1;
+%model.layers(2).W(:,:)=0;
+%model.layers(2).W(2,:)=1;
 
 %% Model training
 

@@ -3,7 +3,7 @@
 clear
 addpath(genpath('../DeepNNs/'))
 
-x = [80 193; 83 180; 90 177 ; 85 170 ; 65 175; 63 167; 60 170 ; 74  163; 58 157; 80 175];
+x = [80 193; 83 180; 90 177 ; 85 170 ; 65 175; 63 167; 60 170 ; 74  163; 58 157; 70 165];
 N=size(x,1);
 addednoise=0;
 layers=[];
@@ -71,8 +71,8 @@ noouts=size(y,2);
 
 layers=[noins layers noouts];
 lr=1; activation='softsign';
-lr=0.01; activation='tanhact';
-model.l2=0.01;
+lr=0.1; activation='tanhact';
+model.l2=0.05;
 model.l1=0;
 model.layersizes=[layers];
 model.layersizesinitial=model.layersizes;
@@ -261,11 +261,9 @@ for epoch=1:model.epochs
     end
 end
 
-return
-%%
 
+%%
 figure(10)
-clf
 hold on
 nn=200;
 xx = linspace(min(x(:,1))*1.1,1.1*max(x(:,1)),nn);
@@ -279,7 +277,7 @@ else
     [model,Z]=forwardpassing(model,[X(:) Y(:)]);
 end
 %contour(X+xmean(1),Y+xmean(2),reshape(Z(:,1),100,100),'LineWidth',3)
-contour(X+xmean(1),Y+xmean(2),reshape(Z(:,1),nn,nn),[ 0.499999999 0.500000001],'LineWidth',3,'Color',repmat((model.epochs-epoch)/model.epochs,3,1))
+contour(X+xmean(1),Y+xmean(2),reshape(Z(:,1),nn,nn),[ 0.499 0.501],'LineWidth',3,'Color',repmat((model.epochs-epoch)/model.epochs,3,1))
 
 for sampli=1:N
     if y(sampli) ==1
@@ -316,4 +314,4 @@ else
     title(['W_{weight}:' sprintf('%2.2f',W(1,1)) '    W_{random}:' sprintf('%2.2f',W(2,1)) '   Intercept:'   sprintf('%2.2f',newB)]);
 end
 
-set(gcf,'Position',[0 0 800 800]); print(['./figures/example2_l' sprintf('%d',layers) '_' num2str(addednoise) '.png'],'-dpng','-r300')
+set(gcf,'Position',[0 0 800 800]); print(['./figures/example2_ ''.png'],'-dpng','-r300')

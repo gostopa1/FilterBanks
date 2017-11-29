@@ -58,6 +58,8 @@ end
 %model.layers(2).activation='linact';
 %model.layers(layeri).lr=lr; model.layers(layeri).activation='softmaxact';
 
+model.layers(layeri).activation='softsign';
+
 
 %% Model training
 
@@ -192,7 +194,7 @@ plot(out_test,'b')
 
 
 
-dur=5;
+dur=2;
 sampledur=fs*dur;
 
 soundsc(out_test(1:sampledur),fs)

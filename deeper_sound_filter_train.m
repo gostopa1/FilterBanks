@@ -1,6 +1,7 @@
 %% Creating dataset
-addpath(genpath('..\DeepNNs\/'))
-Nins=10
+clear
+addpath(genpath('../newer/DeepNNs/'))
+Nins=50
 make_sound_data
 test_data=x;
 test_data=x;
@@ -10,7 +11,7 @@ y_test=y;
 %% Model Initialization
 clear model
 
-layers=[10];
+layers=[8];
 
 noins=size(x,2);
 noouts=size(y,2);
@@ -20,20 +21,20 @@ model.fe_update=100000;
 model.fe_thres=0.000;
 model.N=size(x,1);
 layers=[noins layers noouts];
-lr=0.01; activation='softsign';
+lr=0.05; activation='softsign';
 %lr=0.01; activation='tanhact';
 %lr=0.01; activation='linact';
 %lr=0.01; activation='relu';
 %lr=0.05; activation='logsi';
-model.batchsize=200;
+model.batchsize=2000;
 model.layersizes=[layers];
 model.layersizesinitial=model.layersizes;
 
 model.target=y;
 model.epochs=1000;
-model.update=500;
-model.l2=0.1;
-model.l1=0.1;
+model.update=100;
+model.l2=-0.01;
+model.l1=0.0;
 model.stopthres=0.00000;
 
 model.errofun='quadratic_cost';
@@ -52,31 +53,36 @@ for layeri=1:(length(layers)-1)
     model.layers(layeri).activation=activation;
     model.layers(layeri).inds=1:model.layersizes(layeri); % To keep track of which nodes are removed etc
 end
-model.layers(1).blr=0;
+model.layers(1).lr=0;
 %model.layers(1).W(:)=1/noins;
 %model.layers(1).W=repmat((-1).^(1:noins)',1,model.layersizes(2));
 %model.layers(1).W=repmat((-1).^(1:noins)',1,model.layersizes(2));
 %model.layers(1).W(3:end,:)=0;
     
-layeri=1;
-model.layers(layeri).W=1*(zeros(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
+% layeri=1;
+%model.layers(layeri).W=1*(zeros(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
 
-
-n = noins-1;
-Wn = 0.4;
-b = fir1(n,Wn);
-
+%%
 %model.layers(1).W(:,1)=b;
 %bp1= fir1(n,[0.5 0.6],'bandpass');
-freqstep=500;
+freqstep=11.25;
 for filteri=1:model.layersizes(2)
 %model.layers(1).W(:,2)=bp1;
-bp2 = fir1(n,[freqstep*(filteri) freqstep*(filteri+1)]*(pi/fs),'bandpass');
-model.layers(1).W(filteri,:)=bp2;
+%bp2 = fir1(n,[freqstep*(filteri) freqstep*(filteri+1)]*(pi/fs),'bandpass');
+
+%bpFilt = designfilt('bandpassfir','FilterOrder',Nins-1, 'CutoffFrequency1',freqstep*(filteri) ,'CutoffFrequency2',freqstep*(filteri+1) , 'SampleRate',fs);
+bpFilt = designfilt('bandpassfir','FilterOrder',Nins-1, 'CutoffFrequency1',freqstep*2^(filteri-1) ,'CutoffFrequency2',freqstep*2^(filteri) , 'SampleRate',fs);
+bp2 = bpFilt.Coefficients;
+
+model.layers(1).W(:,filteri)=bp2;
 imps(filteri,:)=bp2;
 end
 
-
+%fvtool(bpFilt)
+show_network
+subplot(4,1,3)
+%plot(imps)
+imagesc(imps)
 %% Model training
 
 clear error
@@ -85,17 +91,25 @@ for layeri=1:(length(model.layers))
 end
 model.epoch=1;
 epoch=1;
-    model=vectorize_all_weights(model);
-
-[model,out2(:,:,model.epoch)]=forwardpassing(model,model.x);
-[model.error(epoch),dedout]=feval(model.errofun,model);
+model=vectorize_all_weights(model);
 
 %%
+
+dur=3;
+sampledur=fs*dur;
+[~,out_test]=forwardpassing(model,[test_data]);
+
+%model.layers(2).W=1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
+%model.layers(2).W=0*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
+%model.layers(2).W(5)=1;
+soundsc(out_test(1:sampledur),fs)
+return
+%%
+
+
 model=model_train_fast(model);
 show_network
 
-%save_figure
-%% Visual evaluation
 % model2=model;
 model.test=0;
 [model,out_test]=forwardpassing(model,[test_data]);
@@ -110,16 +124,13 @@ xlabel('Epoch')
 ylabel('Error')
 
 
-dur=5;
-sampledur=fs*dur;
-
 soundsc(out_test(1:sampledur),fs)
-return
-soundsc(inwav(1:sampledur),fs)
-pause(dur)
-soundsc(outwav(1:sampledur),fs)
-pause(dur)
-soundsc(out_test(1:sampledur),fs)
+% return
+% soundsc(inwav(1:sampledur),fs)
+% pause(dur)
+% soundsc(outwav(1:sampledur),fs)
+% pause(dur)
+% soundsc(out_test(1:sampledur),fs)
 
 %%
 

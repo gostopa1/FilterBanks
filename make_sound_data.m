@@ -5,7 +5,7 @@ infile=['./sounds/darkclean.wav'];
 
 outfile=['./sounds/darkdirt.wav']
 
-gap=4;
+gap=2;
 [inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(:,1); end; inwav=inwav(1:gap:end); inwav=inwav/max(abs(inwav));
 [outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(:,1); end; outwav=outwav(1:gap:end); outwav=outwav/max(abs(outwav));
 fs=fs/gap;
@@ -21,7 +21,7 @@ x=zeros(floor((minimumlength-Nins)/gap),Nins);
 y=zeros(floor((minimumlength-Nins)/gap),Nouts);
 
 for i=(Nins+1):gap:minimumlength
-     x(sampli,:)=inwav((i-Nins):(i-1));
+     x(sampli,:)=inwav((i-Nins+1):(i));
      y(sampli,:)=outwav(i);
      sampli=sampli+1;
 end

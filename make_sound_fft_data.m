@@ -13,7 +13,7 @@ fs=fs/gap;
 if ~exist('Nins')
     Nins=10;
 end
-Nouts=Nins;
+Nouts=1;
 
 sampli=1;
 gap=1;
@@ -24,6 +24,6 @@ y=zeros(floor((minimumlength-Nins)/gap),Nouts);
 for i=(Nins+1):gap:minimumlength
      x(sampli,:)=inwav((i-Nins):(i-1));
      
-     y(sampli,:)=outwav((i-Nins):(i-1));
+     y(sampli,:)=outwav(i-1);
      sampli=sampli+1;
 end

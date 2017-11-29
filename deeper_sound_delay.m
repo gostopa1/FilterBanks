@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../DeepNNs/'))
-Nins=2000;
+Nins=1000;
 make_sound_data
 test_data=x;
 test_data=x;
@@ -62,7 +62,8 @@ model.layers(1).blr=0;
 layeri=1;
 model.layers(layeri).W=1*(zeros(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
 model.layers(1).W([1 end],:)=1;
-model.layers(1).W([end],:)=0.2;
+model.layers(1).W([end],:)=1;
+
 %model.layers(1).W([ 500 ],:)=-1;
 
 %n = noins-1;

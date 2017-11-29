@@ -26,13 +26,13 @@ lr=0.01; activation='softsign';
 %lr=0.01; activation='relu';
 %lr=0.05; activation='logsi';
 %model.batchsize=2000;
-model.batchsize=10000;
+model.batchsize=1000;
 model.layersizes=[layers];
 model.layersizesinitial=model.layersizes;
 
 model.target=y;
 model.epochs=10000;
-model.update=100;
+model.update=500;
 model.l2=0.01;
 model.l1=0.0;
 model.stopthres=0.00000;
@@ -189,7 +189,7 @@ clf
 hold on
 plot(outwav,'k')
 plot(out_test,'b')
-
+legend({'Original','Modeled'})
 
 
 dur=5;
