@@ -2,7 +2,7 @@ infile=['./sounds/darkclean.wav'];
 outfile=['./sounds/darkdirt.wav']
 
 %infile=['./piano_descending.wav'];
-gap=4;
+gap=1;
 [inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(:,1); end; inwav=inwav(1:gap:end); inwav=inwav/max(abs(inwav));
 [outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(:,1); end; outwav=outwav(1:gap:end); outwav=outwav/max(abs(outwav));
 outwav=real(ifft(circshift(fft(inwav),1000)));
@@ -10,8 +10,9 @@ fs=fs/gap;
 if ~exist('Nins')
     Nins=64;
 end
-%Nouts=Nins;
 Nouts=1;
+Nouts=Nins;
+
 
 sampli=1;
 gap=1;
@@ -39,7 +40,7 @@ end
 f1=110.*2.^((1:nonotes)./12);
 %f=[1:20 f]; 
 f=[f1 f1];
-%f=(1:(Nins))*(fs/Nins); f1=f(1:Nins/2); %% FFT bins 
+f=(1:(Nins))*(fs/Nins); f1=f(1:Nins/2); %% FFT bins 
 
 Wsin=sin(2*pi*t'*f(1:(length(f)/2)));
 Wcos=cos(2*pi*t'*f(1:(length(f)/2)));

@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=10; gap=1;
+Nins=15; gap=1;
 make_sound_data
 test_data=x;
 test_data=x;
@@ -11,7 +11,7 @@ y_test=y;
 %% Model Initialization
 clear model
 
-layers=[15];
+layers=[18];
 
 noins=size(x,2);
 noouts=size(y,2);
@@ -74,7 +74,7 @@ for filteri=1:model.layersizes(2)
 %bpFilt = designfilt('bandpassfir','FilterOrder',Nins-1, 'CutoffFrequency1',freqstep*(filteri) ,'CutoffFrequency2',freqstep*(filteri+1) , 'SampleRate',fs);
 bpFilt = designfilt('bandpassfir','FilterOrder',Nins-1, 'CutoffFrequency1',basefreq*2^((filteri-1)/octavesteps) ,'CutoffFrequency2',basefreq*2^((filteri)/octavesteps) , 'SampleRate',fs);
 bp2 = bpFilt.Coefficients;
-%basefreq*2^((filteri-1)/octavesteps)
+basefreq*2^((filteri-1)/octavesteps)
 model.layers(1).W(:,filteri)=bp2;
 imps(filteri,:)=bp2;
 end
@@ -83,11 +83,8 @@ figure(5)
 clf
 %fvtool(bpFilt)
 show_network_local
-set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
+set(gcf,'PaperPosition',[0 0 500 500]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
 
-%subplot(4,1,3)
-%plot(imps)
-%imagesc(imps)
 %% Model training
 
 clear error
