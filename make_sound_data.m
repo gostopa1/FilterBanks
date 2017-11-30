@@ -4,8 +4,10 @@ infile=['./sounds/darkclean.wav'];
 
 
 outfile=['./sounds/darkdirt.wav']
+if exist('gap')~=1
+    gap=2;
+end
 
-gap=2;
 [inwav,fs]=audioread(infile); if(size(inwav,2)>1), inwav=inwav(:,1); end; inwav=inwav(1:gap:end); inwav=inwav/max(abs(inwav));
 [outwav,fs]=audioread(outfile); if(size(outwav,2)>1), outwav=outwav(:,1); end; outwav=outwav(1:gap:end); outwav=outwav/max(abs(outwav));
 fs=fs/gap;

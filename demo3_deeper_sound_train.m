@@ -1,6 +1,7 @@
 %% Creating dataset
-addpath(genpath('../DeepNNs/'))
-Nins=10;
+clear
+addpath(genpath('../newer/DeepNNs/'))
+Nins=100;
 make_sound_data
 test_data=x;
 x_test=x;
@@ -191,16 +192,21 @@ plot(outwav,'k')
 plot(out_test,'b')
 legend({'Original','Modeled'})
 
+set(gcf,'PaperPosition',[0 0 1000 200]/40); print(['./figures/' num2str(Nins) 'trainedmodeled' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
 
 dur=5;
 sampledur=fs*dur;
 
 soundsc(out_test(1:sampledur),fs)
-return
-soundsc(inwav(1:sampledur),fs)
-pause(dur)
-soundsc(outwav(1:sampledur),fs)
+% return
+% soundsc(inwav(1:sampledur),fs)
+% pause(dur)
+% soundsc(outwav(1:sampledur),fs)
 
 
-%%
+figure(1);clf
+show_network_local
+set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'trained' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
+audiowrite(['./result_sounds/' num2str(Nins) 'trained.wav'],out_test,fs)
+
 

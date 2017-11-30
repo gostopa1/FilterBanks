@@ -22,7 +22,7 @@ plot(x,res','LineWidth',3)
 
 
 axis([-xlim xlim -xlim xlim])
-h1=legend({'Softsign','Logistic','ReLU','Tanh'},'Location','EastOutside')
+h1=legend({'Softsign','Logistic','ReLU','Tanh','Sinc'},'Location','EastOutside')
 set(h1,'Visible','Off')
 xlabel('Input')
 ylabel('Output')
@@ -31,7 +31,7 @@ axis([-xlim xlim -xlim xlim])
 subplot(1,2,2)
 plot(x,der','LineWidth',3)
 title('Activation function derivatives')
-h1=legend({'Softsign','Logistic','ReLU','Tanh'},'Location','EastOutside')
+h1=legend({'Softsign','Logistic','ReLU','Tanh','Sinc'},'Location','EastOutside')
 axis([-xlim xlim -xlim xlim])
 
 set(gcf,'PaperPosition',[0 0 1300 400]/40); set(gcf,'Position',[0 0 1300 400]); print(['./figures/actfun.png'],'-dpng','-r300')

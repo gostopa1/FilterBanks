@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=1024; nonotes=96;
+Nins=512; nonotes=24
 make_sound_fft_data
 test_data=x;
 x_test=x;
@@ -12,7 +12,7 @@ y_test=y;
 clear model
 nobins=size(W,2) 
 %layers=[Nins 2 1 Nins Nins];
-layers=[ nobins  nobins  ];
+layers=[ nobins nobins/2 nobins/2 Nins ];
 %layers=[];
 
 noins=size(x,2);
@@ -57,56 +57,56 @@ for layeri=1:(length(layers)-1)
     model.layers(layeri).inds=1:model.layersizes(layeri); % To keep track of which nodes are removed etc
 end
 %model.layers(1).blr=0;f
-
+%model.layers(2).activation='softsign';
 %model.layers(2).activation='linact';
 %model.layers(layeri).lr=lr; model.layers(layeri).activation='softmaxact';
-%model.layers(1).activation='quadraticact';
-model.layers(2).activation='linact';
-%model.layers(2).activation='squarerootact';
-%model.layers(2).activation='softsign';
+model.layers(1).activation='quadraticact';
+%model.layers(2).activation='linact';
+model.layers(2).activation='squarerootact';
+
 
 %model=model_train_fast(model); 
 model.layers(1).W=W;
-%model.layers(2).W=Wsum;
+model.layers(2).W=Wsum;
 
-%model.layers(end-1).W=W(:,1:2:end)'; % If you take the last one, it will suffer from the hanning window
-%model.layers(end-1).W=W'; % If you take the last one, it will suffer from the hanning window
-model.layers(end).W=W(Nins/2,:)'; % If you take the last one, it will suffer from the hanning window
+%model.layers(end-1).W=Wsin'; % If you take the last one, it will suffer from the hanning window
+%model.layers(end).W=W(:,Nins/2); % If you take the last one, it will suffer from the hanning window
 model.layersizes
 %%
 layeri=2;
-for layeri=2:(length(model.layers)-2)
+for layeri=3:(length(model.layers)-2)
 %for layeri=3
 model.layers(layeri).W=1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
 end
-layeri=2;
+
 %model.layers(4).W(1,1)=1;
-model.layers(layeri).W(:)=0;
+model.layers(3).W(:)=0;
 %model.layers(2).W(2,19)=2*(1/Nins);
 
-freqshift=20;
+freqshift=2;
 %for i=1:2:(nobins-freqshift)
-for i=1:2:(model.layersizes(layeri+1))
-    model.layers(layeri).W(i,i)=1;
-    model.layers(layeri).W(i,i)=1;
+for i=1:(nobins/2)
+    model.layers(3).W(i,i)=1;
+    %model.layers(2).W(i,i)=1;
+      
     
-    model.layers(layeri).W(i+1,mod(i+freqshift,nobins)+1)=20; 
-    model.layers(layeri).W(i,mod(i+freqshift-1,nobins)+1)=20;
-    %nextind=mod(i+freqshift,nobins/2)+1;
-    %model.layers(layeri).W(i,nextind)=1;
+    %model.layers(2).W(i,mod(i+freqshift-1,nobins)+1)=10;
+    nextind=mod(i+freqshift,nobins/2)+1
+    model.layers(3).W(i,nextind)=1;
     
-    %model.layers(layeri).W(i,i)=1;
-
-    %model.layers(layeri).W(i,i)=1;
+    %model.layers(2).W(i,i)=1;
+    
+    %model.layers(2).W(i,i)=1;
 end
 
 %figure(5); clf;
 show_layer(model, [2 3])
- 
- %freqi=30:40;
- %freqj=round(freqi*2);
- 
- %model.layers(layeri).W(freqi,freqj)=10;
+
+
+% 
+% freqi=1:20
+% freqj=40:60
+% model.layers(2).W(freqi,freqj)=1/length(freqi);
 %%
 %show_network
 
@@ -115,11 +115,11 @@ show_layer(model, [2 3])
 model.test=0;
 [model,out_test]=forwardpassing(model,[test_data]);
 sampleind=1:1000:size(x,1);
-%  figure(2)
-%  clf
-% subplot(2,1,1)
-%plot(f,model.layers(2).out(sampleind,:))
-%plot(model.layers(2).out(sampleind,:)')
+ figure(2)
+ clf
+subplot(2,1,1)
+plot(f1,model.layers(3).out(sampleind,:))
+% plot(model.layers(2).out(sampleind,:)')
 
 
 dur=5;

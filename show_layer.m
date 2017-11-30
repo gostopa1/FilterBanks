@@ -1,6 +1,8 @@
+function show_layer(model, layer)
+
 hold on
-linefactor=5;
-for layeri=1:(length(model.layersizes)-1)
+linefactor=2;
+for layeri=layer
      ylocs1=(1:model.layersizesinitial(layeri));
     
     ylocs1=ylocs1-mean(ylocs1);
@@ -37,7 +39,7 @@ end
 
 %%
 
-for layeri=1:length(model.layersizes)
+for layeri=layer:(layeri+1)
     if layeri>1
         switch model.layers(layeri-1).activation
             case 'logsi'
@@ -72,5 +74,4 @@ ylims=minmax(1:max(model.layersizesinitial))-mean(1:max(model.layersizesinitial)
 axis([1 length(model.layers)+1 ylims(1)-0.5 ylims(2)+0.5])
 axis off
 box off
-
-%%
+end
