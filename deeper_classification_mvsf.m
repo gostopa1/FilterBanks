@@ -6,7 +6,7 @@ addpath(genpath('../DeepNNs/'))
 x = [80 193; 83 180; 90 177 ; 85 170 ; 65 175; 63 167; 60 170 ; 74  163; 58 157; 80 175];
 N=size(x,1);
 addednoise=0;
-layers=[];
+layers=[10];
 if addednoise==1
     x(:,2)=randn(N,1);
 end
@@ -51,7 +51,7 @@ hAxes.YRuler.Axle.LineStyle = 'none';
 
 axis([50 95 150 200])
 title('Example dataset')
-set(gcf,'Position',[0 0 800 800]); print('./figures/example1.png','-dpng','-r300')
+%set(gcf,'Position',[0 0 800 800]); print('./figures/example1.png','-dpng','-r300')
 %% Model Initialization
 figure(1)
 clear model
@@ -310,10 +310,13 @@ myw=77;
 myh=153;
 W(1,1)*myw+W(2,1)*myh+newB;
 if addednoise==0
-    
-    title(['W_{weight}:' sprintf('%2.2f',W(1,1)) '    W_{height}:' sprintf('%2.2f',W(2,1)) '   Intercept:'   sprintf('%2.2f',newB)]);
+    if length(layers)==2
+        title(['W_{weight}:' sprintf('%2.2f',W(1,1)) '    W_{height}:' sprintf('%2.2f',W(2,1)) '   Intercept:'   sprintf('%2.2f',newB)]);
+    end
 else
-    title(['W_{weight}:' sprintf('%2.2f',W(1,1)) '    W_{random}:' sprintf('%2.2f',W(2,1)) '   Intercept:'   sprintf('%2.2f',newB)]);
+    if length(layers)==2
+        title(['W_{weight}:' sprintf('%2.2f',W(1,1)) '    W_{random}:' sprintf('%2.2f',W(2,1)) '   Intercept:'   sprintf('%2.2f',newB)]);
+    end
 end
 
 set(gcf,'Position',[0 0 800 800]); print(['./figures/example2_l' sprintf('%d',layers) '_' num2str(addednoise) '.png'],'-dpng','-r300')
