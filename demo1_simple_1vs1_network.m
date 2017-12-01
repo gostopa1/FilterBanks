@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=1 ;
+Nins=100 ;
 make_sound_data
 test_data=x;
 x_test=x;
@@ -57,7 +57,7 @@ for layeri=1:(length(layers)-1)
     model.layers(layeri).inds=1:model.layersizes(layeri); % To keep track of which nodes are removed etc
 end
 
-model.layers(1).W(1)=8
+%model.layers(1).W(1)=8
 figure(1);clf
 show_network_local
 %set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'vs1net' sprintf('w%2.2f_',model.layers(1).W(1)) activation '.png'],'-dpng','-r300')

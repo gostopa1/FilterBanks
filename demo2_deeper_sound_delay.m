@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../DeepNNs/'))
-Nins=10; gap=4
+Nins=1000; gap=4
 make_sound_data
 test_data=x;
 test_data=x;

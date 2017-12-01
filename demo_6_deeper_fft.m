@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=1024; nonotes=96;
+Nins=512; nonotes=96;
 make_sound_fft_data
 test_data=x;
 x_test=x;
@@ -10,7 +10,7 @@ model.x_test=x;
 y_test=y;
 %% Model Initialization
 clear model
-nobins=size(W,2) 
+nobins=size(W,2)
 %layers=[Nins 2 1 Nins Nins];
 layers=[ nobins  nobins  ];
 %layers=[];
@@ -65,7 +65,7 @@ model.layers(2).activation='linact';
 %model.layers(2).activation='squarerootact';
 %model.layers(2).activation='softsign';
 
-%model=model_train_fast(model); 
+%model=model_train_fast(model);
 model.layers(1).W=W;
 %model.layers(2).W=Wsum;
 
@@ -76,8 +76,8 @@ model.layersizes
 %%
 layeri=2;
 for layeri=2:(length(model.layers)-2)
-%for layeri=3
-model.layers(layeri).W=1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
+    %for layeri=3
+    model.layers(layeri).W=1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
 end
 layeri=2;
 %model.layers(4).W(1,1)=1;
@@ -87,33 +87,32 @@ model.layers(layeri).W(:)=0;
 freqshift=20;
 %for i=1:2:(nobins-freqshift)
 for i=1:2:(model.layersizes(layeri+1))
-    model.layers(layeri).W(i,i)=1;
-    model.layers(layeri).W(i,i)=1;
+    %model.layers(layeri).W(i,i)=1;
+    %model.layers(layeri).W(i,i)=1;
     
-    model.layers(layeri).W(i+1,mod(i+freqshift,nobins)+1)=20; 
-    model.layers(layeri).W(i,mod(i+freqshift-1,nobins)+1)=20;
+    %model.layers(layeri).W(i+1,mod(i+freqshift,nobins)+1)=20;
+    %model.layers(layeri).W(i,mod(i+freqshift-1,nobins)+1)=20;
+    
     %nextind=mod(i+freqshift,nobins/2)+1;
     %model.layers(layeri).W(i,nextind)=1;
     
     %model.layers(layeri).W(i,i)=1;
-
+    
     %model.layers(layeri).W(i,i)=1;
 end
 
 %figure(5); clf;
 show_layer(model, [2 3])
- 
- %freqi=30:40;
- %freqj=round(freqi*2);
- 
- %model.layers(layeri).W(freqi,freqj)=10;
-%%
-%show_network
 
-% model2=model;
+freqi=5:15;
+freqj=round(freqi*4);
+model.layers(layeri).W(freqi,freqj)=1;
+
+dur=5;
+sampledur=fs*dur;
 
 model.test=0;
-[model,out_test]=forwardpassing(model,[test_data]);
+[model,out_test]=forwardpassing(model,[test_data(1:sampledur,:)]);
 sampleind=1:1000:size(x,1);
 %  figure(2)
 %  clf
@@ -122,14 +121,15 @@ sampleind=1:1000:size(x,1);
 %plot(model.layers(2).out(sampleind,:)')
 
 
-dur=5;
-sampledur=fs*dur;
+
 
 soundsc(out_test(1:sampledur,1),fs)
-return
-soundsc(inwav(1:sampledur),fs)
-pause(dur)
-soundsc(outwav(1:sampledur),fs)
+% return
+% soundsc(inwav(1:sampledur),fs)
+% pause(dur)
+% soundsc(outwav(1:sampledur),fs)
+
+audiowrite(['./result_sounds/' num2str(Nins) 'fft_ring.wav'],out_test(1:sampledur,1)./max(abs(out_test(1:sampledur,1))),fs)
 
 %% Check out FFT
 

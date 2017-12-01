@@ -83,9 +83,8 @@ figure(5)
 clf
 %fvtool(bpFilt)
 show_network_local
-set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
+%set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
 
-%subplot(4,1,3)
 %plot(imps)
 %imagesc(imps)
 %% Model training

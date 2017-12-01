@@ -39,7 +39,7 @@ end
 f1=110.*2.^((1:nonotes)./12);
 %f=[1:20 f]; 
 f=[f1 f1];
-%f=(1:(Nins))*(fs/Nins); f1=f(1:Nins/2); %% FFT bins 
+f=(1:(Nins))*(fs/Nins); f1=f(1:Nins/2); %% FFT bins 
 
 Wsin=sin(2*pi*t'*f(1:(length(f)/2)));
 Wcos=cos(2*pi*t'*f(1:(length(f)/2)));

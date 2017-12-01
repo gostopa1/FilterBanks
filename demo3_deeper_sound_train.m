@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=100;
+Nins=10;
 make_sound_data
 test_data=x;
 x_test=x;
@@ -11,7 +11,7 @@ y_test=y;
 %% Model Initialization
 clear model
 
-layers=[];
+layers=[5];
 
 noins=size(x,2);
 noouts=size(y,2);
