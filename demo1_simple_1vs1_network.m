@@ -59,7 +59,7 @@ end
 
 %model.layers(1).W(1)=8
 figure(1);clf
-show_network_local
+show_network(model)
 %set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'vs1net' sprintf('w%2.2f_',model.layers(1).W(1)) activation '.png'],'-dpng','-r300')
 [~,out_test]=forwardpassing(model,x);
 out_test=zscore(out_test);

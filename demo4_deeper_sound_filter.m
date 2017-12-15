@@ -87,7 +87,7 @@ epoch=1;
 [model,out2(:,:,model.epoch)]=forwardpassing(model,model.x);
 [model.error(epoch),dedout]=feval(model.errofun,model);
 
-show_network_local
+show_network(model)
 
 %% Visual evaluation
 

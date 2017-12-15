@@ -1,6 +1,6 @@
 %% Creating dataset
 clear
-addpath(genpath('../DeepNNs/'))
+addpath(genpath('../newer/DeepNNs/'))
 Nins=1000; gap=4
 make_sound_data
 test_data=x;
@@ -85,7 +85,7 @@ epoch=1;
 [model,out2(:,:,model.epoch)]=forwardpassing(model,model.x);
 [model.error(epoch),dedout]=feval(model.errofun,model);
 
-show_network_local
+show_network(model)
 
 %save_figure
 %% Visual evaluation
@@ -122,8 +122,10 @@ soundsc(out_test(1:sampledur),fs)
 % plot(outwav)
 % plot(out_test)
 
-figure(1);clf
-show_network_local
+figure(1);
+clf
+
+show_network(model)
 set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'delay' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
 audiowrite(['./result_sounds/' num2str(Nins) 'delay.wav'],out_test,fs)
 

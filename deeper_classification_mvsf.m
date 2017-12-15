@@ -1,7 +1,7 @@
 %% Creating dataset
 
 clear
-addpath(genpath('../DeepNNs/'))
+addpath(genpath('../newer/DeepNNs/'))
 
 x = [80 193; 83 180; 90 177 ; 85 170 ; 65 175; 63 167; 60 170 ; 74  163; 58 157; 80 175];
 N=size(x,1);
@@ -127,7 +127,7 @@ for epoch=1:model.epochs
             delete(sp2);
         end
         sp2=subplot(2,2,1);
-        show_network_local
+        show_network(model)
         subplot(2,2,3)
         
         plot(model.error)

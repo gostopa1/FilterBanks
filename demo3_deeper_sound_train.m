@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=100;
+Nins=2;
 make_sound_data
 %x=x(1:1000,:);
 %x=x(10000:15000,:);
