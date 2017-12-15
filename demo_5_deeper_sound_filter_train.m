@@ -21,12 +21,12 @@ model.fe_update=100000;
 model.fe_thres=0.000;
 model.N=size(x,1);
 layers=[noins layers noouts];
-lr=0.005; activation='softsign';
+lr=0.01; activation='softsign';
 %lr=0.01; activation='tanhact';
 %lr=0.005; activation='linact';
 %lr=0.01; activation='relu';
 %lr=0.05; activation='logsi';
-model.batchsize=2000;
+model.batchsize=1000;
 model.layersizes=[layers];
 model.layersizesinitial=model.layersizes;
 
@@ -83,7 +83,14 @@ figure(5)
 clf
 %fvtool(bpFilt)
 show_network_local
+
 set(gcf,'PaperPosition',[0 0 500 500]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
+
+
+%set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'filterbank' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
+
+%plot(imps)
+%imagesc(imps)
 
 %% Model training
 
@@ -110,7 +117,7 @@ soundsc(out_test(1:sampledur),fs)
 
 
 model=model_train_fast(model);
-show_network
+show_network(model)
 
 % model2=model;
 model.test=0;
@@ -126,7 +133,7 @@ xlabel('Epoch')
 ylabel('Error')
 
 
-soundsc(out_test(1:sampledur),fs)
+soundsc(out_test(1:sampledur,1),fs)
 % return
 % soundsc(inwav(1:sampledur),fs)
 % pause(dur)

@@ -90,7 +90,7 @@ epoch=1;
 show_network_local
 
 %% Visual evaluation
-% model2=model;
+
 model.test=0;
 [model,out_test]=forwardpassing(model,[test_data]);
 factor=15;
@@ -114,7 +114,7 @@ plot(bp2,'LineWidth',2)
 legend({'High','Low'},'Location','SouthOutside')
 subplot(6,1,[4:6])
 show_network_local
-set(gcf,'PaperPosition',[0 0 400 600]/40); print(['./figures/' num2str(Nins) 'hilowfilter' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
+%set(gcf,'PaperPosition',[0 0 400 600]/40); print(['./figures/' num2str(Nins) 'hilowfilter' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r500')
 audiowrite(['./result_sounds/' num2str(Nins) 'hilowfilter.wav'],out_test,fs)
 
 %%

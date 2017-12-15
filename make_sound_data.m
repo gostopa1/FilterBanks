@@ -15,15 +15,17 @@ if ~exist('Nins')
     Nins=10;
 end
 Nouts=1;
+Nouts=Nins;
 
 sampli=1;
-gap=1;
+samplegap=1;
 minimumlength=min([length(inwav) length(outwav)])
-x=zeros(floor((minimumlength-Nins)/gap),Nins);
-y=zeros(floor((minimumlength-Nins)/gap),Nouts);
+x=zeros(floor((minimumlength-Nins)/samplegap),Nins);
+y=zeros(floor((minimumlength-Nins)/samplegap),Nouts);
 
-for i=(Nins+1):gap:minimumlength
+for i=(Nins+1):samplegap:minimumlength
      x(sampli,:)=inwav((i-Nins+1):(i));
-     y(sampli,:)=outwav(i);
+     %y(sampli,:)=outwav(i);
+     y(sampli,:)=outwav((i-Nins+1):(i));
      sampli=sampli+1;
 end

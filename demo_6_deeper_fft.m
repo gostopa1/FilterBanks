@@ -1,7 +1,7 @@
 %% Creating dataset
 clear
 addpath(genpath('../newer/DeepNNs/'))
-Nins=1024; nonotes=96;
+Nins=512; nonotes=96;
 make_sound_fft_data
 test_data=x;
 x_test=x;
@@ -85,6 +85,7 @@ layeri=2;
 model.layers(layeri).W(:)=0;
 %model.layers(2).W(2,19)=2*(1/Nins);
 
+<<<<<<< HEAD:demo_6_deeper_fft.m
 freqshift=4;
 for i=1:2:(nobins-freqshift)
     %for i=1:2:(model.layersizes(layeri+1))
@@ -93,6 +94,17 @@ for i=1:2:(nobins-freqshift)
     
     model.layers(layeri).W(i+1,mod(i+freqshift,nobins)+1)=1;
     model.layers(layeri).W(i,mod(i+freqshift-1,nobins)+1)=1;
+=======
+freqshift=20;
+%for i=1:2:(nobins-freqshift)
+for i=1:2:(model.layersizes(layeri+1))
+    %model.layers(layeri).W(i,i)=1;
+    %model.layers(layeri).W(i,i)=1;
+    
+    %model.layers(layeri).W(i+1,mod(i+freqshift,nobins)+1)=20;
+    %model.layers(layeri).W(i,mod(i+freqshift-1,nobins)+1)=20;
+    
+>>>>>>> 7537cc2342bfeafb94405082a0f11701bf7e3d36:demo_6_deeper_fft.m
     %nextind=mod(i+freqshift,nobins/2)+1;
     %model.layers(layeri).W(i,nextind)=1;
     
@@ -102,26 +114,45 @@ for i=1:2:(nobins-freqshift)
 end
 
 %figure(5); clf;
+<<<<<<< HEAD:demo_6_deeper_fft.m
 %show_layer(model, [2 3])
 
 freqi=20:40;
 freqj=round(freqi*2);
 
 %model.layers(layeri).W(freqi,freqj)=10;
+=======
+show_layer(model, [2 3])
 
-model.test=0;
-[model,out_test]=forwardpassing(model,[test_data]);
-sampleind=1:1000:size(x,1);
-
+freqi=5:15;
+freqj=round(freqi*4);
+model.layers(layeri).W(freqi,freqj)=1;
 
 dur=5;
 sampledur=fs*dur;
+>>>>>>> 7537cc2342bfeafb94405082a0f11701bf7e3d36:demo_6_deeper_fft.m
 
+model.test=0;
+[model,out_test]=forwardpassing(model,[test_data(1:sampledur,:)]);
+sampleind=1:1000:size(x,1);
+
+
+
+
+<<<<<<< HEAD:demo_6_deeper_fft.m
 soundsc(sum(out_test(1:sampledur,:),2),fs)
+=======
+soundsc(out_test(1:sampledur,1),fs)
+>>>>>>> 7537cc2342bfeafb94405082a0f11701bf7e3d36:demo_6_deeper_fft.m
 % return
 % soundsc(inwav(1:sampledur),fs)
 % pause(dur)
 % soundsc(outwav(1:sampledur),fs)
+<<<<<<< HEAD:demo_6_deeper_fft.m
+=======
+
+audiowrite(['./result_sounds/' num2str(Nins) 'fft_ring.wav'],out_test(1:sampledur,1)./max(abs(out_test(1:sampledur,1))),fs)
+>>>>>>> 7537cc2342bfeafb94405082a0f11701bf7e3d36:demo_6_deeper_fft.m
 
 %% Check out FFT
 

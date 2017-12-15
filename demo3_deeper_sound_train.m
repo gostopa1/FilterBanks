@@ -3,6 +3,9 @@ clear
 addpath(genpath('../newer/DeepNNs/'))
 Nins=100;
 make_sound_data
+%x=x(1:1000,:);
+%x=x(10000:15000,:);
+%y=y(10000:15000,:);
 test_data=x;
 x_test=x;
 
@@ -21,7 +24,7 @@ model.fe_update=100000;
 model.fe_thres=0.000;
 model.N=size(x,1);
 layers=[noins layers noouts];
-lr=0.01; activation='softsign';
+lr=0.2; activation='softsign';
 %lr=0.01; activation='sincact';
 %lr=0.01; activation='linact';
 %lr=0.01; activation='relu';
@@ -32,23 +35,23 @@ model.layersizes=[layers];
 model.layersizesinitial=model.layersizes;
 
 model.target=y;
-model.epochs=10000;
-model.update=500;
-model.l2=0.01;
+model.epochs=5000;
+model.update=200;
+model.l2=0.0;
 model.l1=0.0;
 model.stopthres=0.00000;
 
 %model.errofun='quadratic_cost';
 model.errofun='cross_entropy_cost';
-
+model.errofun='crossvar';
 for layeri=1:(length(layers)-1)
     
     model.layers(layeri).lr=lr;
-    model.layers(layeri).blr=lr;
+    model.layers(layeri).blr=0;
     model.layers(layeri).Ws=[layers(layeri) layers(layeri+1)];
     %model.layers(layeri).W=(randn(layers(layeri),layers(layeri+1))-0.5)/10;
     
-    model.layers(layeri).W=1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
+    model.layers(layeri).W=0.1*(randn(layers(layeri),layers(layeri+1)))*sqrt(2/(model.layersizes(layeri)+model.layersizes(layeri+1)));
     %model.layers(layeri).B=(randn(layers(layeri+1),1)-0.5)/10;
     model.layers(layeri).B=(zeros(layers(layeri+1),1))/10;
     model.layers(layeri).activation=activation;
@@ -154,7 +157,7 @@ for epoch=1:model.epochs
     
     
 end
-show_network
+%show_network(model)
 
 figure(80)
 clf
@@ -188,25 +191,36 @@ ylabel('Error')
 figure(5)
 clf
 hold on
-plot(outwav,'k')
-plot(out_test,'b')
+plot(x_test(:,1),'k')
+plot(out_test(:,1),'b')
 legend({'Original','Modeled'})
 
-set(gcf,'PaperPosition',[0 0 1000 200]/40); print(['./figures/' num2str(Nins) 'trainedmodeled' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
+
 
 dur=5;
 sampledur=fs*dur;
 
-soundsc(out_test(1:sampledur),fs)
-% return
+soundsc(out_test(1:sampledur,1),fs)
+ return
 % soundsc(inwav(1:sampledur),fs)
 % pause(dur)
 % soundsc(outwav(1:sampledur),fs)
 
-
+set(gcf,'PaperPosition',[0 0 1000 200]/40); print(['./figures/' num2str(Nins) 'trainedmodeled' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
 figure(1);clf
 show_network_local
 set(gcf,'PaperPosition',[0 0 400 400]/40); print(['./figures/' num2str(Nins) 'trained' sprintf('w%2.2f',model.layers(1).W(1)) '.png'],'-dpng','-r300')
 audiowrite(['./result_sounds/' num2str(Nins) 'trained.wav'],out_test,fs)
 
 
+return
+
+
+%%
+%[y_t,fst]=audioread('piano_descending.wav');
+[y_t,fst]=audioread('./sounds/darkclean.wav');
+y_t=y_t(1:gap:end,1);
+fst=fst/gap;
+wav_t=pass_sound_through_model(model,y_t);
+
+soundsc(wav_t(:,1),fst)
